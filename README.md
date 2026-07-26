@@ -1,4 +1,4 @@
-# Elias Portfolio — React + Supabase
+# Portfolio — React + Supabase
 
 بورتفوليو React متصل بـ Supabase (Auth + Database)، بنفس تصميم الـ Figma reference، مع أنيميشن وصفحة Admin لإدارة المحتوى.
 

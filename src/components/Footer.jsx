@@ -5,7 +5,7 @@ export default function Footer({ profile }) {
     <footer className="border-t border-bg-border mt-10">
       <div className="max-w-6xl mx-auto px-5 py-8 flex flex-col sm:flex-row justify-between gap-4">
         <div>
-          <p className="font-mono font-semibold">{profile?.name || 'Elias'}</p>
+          <p className="font-mono font-semibold">{profile?.name || 'Portfolio'}</p>
           <p className="text-muted text-sm">{profile?.short_title || 'Web designer and front-end developer'}</p>
         </div>
         <div className="flex gap-4 text-muted">
@@ -15,7 +15,7 @@ export default function Footer({ profile }) {
         </div>
       </div>
       <p className="text-center text-xs text-muted pb-6">
-        © {new Date().getFullYear()} Copyright. Made by {profile?.name || 'Elias'}
+        © {new Date().getFullYear()} Copyright. Made by {profile?.name || 'Portfolio'}
       </p>
     </footer>
   )

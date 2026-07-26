@@ -10,6 +10,14 @@ alter table if exists profile add column if not exists location text;
 alter table if exists profile add column if not exists phone text;
 alter table if exists profile add column if not exists cv_url text;
 alter table if exists profile add column if not exists typing_roles text[];
+alter table if exists profile add column if not exists tagline_ar text;
+alter table if exists profile add column if not exists bio_ar text;
+alter table if exists profile add column if not exists quote_text_ar text;
+alter table if exists profile add column if not exists experience_start_date date;
+alter table if exists projects add column if not exists title_ar text;
+alter table if exists projects add column if not exists description_ar text;
+alter table if exists experience add column if not exists role_ar text;
+alter table if exists experience add column if not exists points_ar text[];
 
 -- ========== PROFILE ==========
 create table if not exists profile (
@@ -39,6 +47,10 @@ create table if not exists profile (
   phone text,
   cv_url text,
   typing_roles text[] default '{}',
+  tagline_ar text,
+  bio_ar text,
+  quote_text_ar text,
+  experience_start_date date,
   updated_at timestamptz default now()
 );
 
@@ -75,6 +87,8 @@ create table if not exists projects (
   figma_url text,
   linkedin_url text,
   banner_color text,
+  title_ar text,
+  description_ar text,
   created_at timestamptz default now()
 );
 
@@ -118,6 +132,8 @@ create table if not exists experience (
   date_range text,
   points text[] default '{}',
   sort_order int default 0,
+  role_ar text,
+  points_ar text[],
   created_at timestamptz default now()
 );
 
@@ -129,6 +145,34 @@ create policy "Public can read experience"
 
 create policy "Authenticated can manage experience"
   on experience for all
+  to authenticated
+  using (true)
+  with check (true);
+
+-- ========== EDUCATION ==========
+create table if not exists education (
+  id uuid primary key default gen_random_uuid(),
+  degree text not null,
+  field text,
+  school text,
+  location text,
+  date_range text,
+  description text,
+  degree_ar text,
+  field_ar text,
+  description_ar text,
+  sort_order int default 0,
+  created_at timestamptz default now()
+);
+
+alter table education enable row level security;
+
+create policy "Public can read education"
+  on education for select
+  using (true);
+
+create policy "Authenticated can manage education"
+  on education for all
   to authenticated
   using (true)
   with check (true);
@@ -182,6 +226,11 @@ begin
     insert into experience (role, company, date_range, points, sort_order) values
       ('Front-end Developer Intern', 'Example Company', 'Jun 2025 - Aug 2025',
        array['Built responsive UI components', 'Worked with the team on a React dashboard'], 1);
+  end if;
+
+  if not exists (select 1 from education) then
+    insert into education (degree, field, school, location, date_range, sort_order) values
+      ('Bachelor of Science', 'Computer Science', 'Your University', 'Your City, Country', '2023 - 2027', 1);
   end if;
 
   if not exists (select 1 from projects) then

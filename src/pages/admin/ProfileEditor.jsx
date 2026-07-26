@@ -6,18 +6,21 @@ const FIELDS = [
   ['role_line_1', 'Role line 1 (e.g. web designer)'],
   ['role_line_2', 'Role line 2 (e.g. front-end developer)'],
   ['tagline', 'Hero tagline'],
+  ['tagline_ar', 'Hero tagline (Arabic, optional)'],
   ['currently_working_on', 'Currently working on'],
   ['avatar_url', 'Hero photo URL (cutout PNG)'],
   ['about_image_url', 'About section photo URL'],
   ['bio', 'Bio (textarea)'],
-  ['years_experience', 'Years of experience (e.g. 1+)'],
-  ['projects_count', 'Projects done (e.g. 6+)'],
+  ['bio_ar', 'Bio (Arabic, optional)'],
+  ['years_experience', 'Years of experience — fallback text (auto-computed if start date below is set)'],
+  ['experience_start_date', 'Experience start date (auto-calculates "Years Experience" stat)'],
   ['committed_percent', 'Committed % (e.g. 100%)'],
   ['university', 'University'],
   ['location', 'Location'],
   ['phone', 'Phone'],
   ['cv_url', 'CV file URL (PDF)'],
   ['quote_text', 'Quote text'],
+  ['quote_text_ar', 'Quote text (Arabic, optional)'],
   ['quote_author', 'Quote author'],
   ['email', 'Contact email'],
   ['discord_tag', 'Discord tag'],
@@ -69,15 +72,18 @@ export default function ProfileEditor() {
       {FIELDS.map(([key, label]) => (
         <div key={key}>
           <label className="block text-xs font-mono text-muted mb-1">{label}</label>
-          {key === 'bio' ? (
+          {key === 'bio' || key === 'bio_ar' ? (
             <textarea
               rows={5}
+              dir={key.endsWith('_ar') ? 'rtl' : undefined}
               value={profile[key] || ''}
               onChange={(e) => handleChange(key, e.target.value)}
               className="w-full bg-transparent border border-bg-border rounded px-3 py-2 text-sm focus:border-accent-violet outline-none"
             />
           ) : (
             <input
+              type={key === 'experience_start_date' ? 'date' : 'text'}
+              dir={key.endsWith('_ar') ? 'rtl' : undefined}
               value={profile[key] || ''}
               onChange={(e) => handleChange(key, e.target.value)}
               className="w-full bg-transparent border border-bg-border rounded px-3 py-2 text-sm focus:border-accent-violet outline-none"

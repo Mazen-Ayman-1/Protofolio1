@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Github, Dribbble, Figma, Sun, Moon } from 'lucide-react'
+import { Menu, X, Github, Dribbble, Figma, Sun, Moon, Lock } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
+import { useLanguage } from '../context/LanguageContext'
 
 const LINKS = [
-  { href: '#home', label: '#home' },
-  { href: '#works', label: '#works' },
-  { href: '#about-me', label: '#about-me' },
-  { href: '#experience', label: '#experience' },
-  { href: '#contacts', label: '#contacts' },
+  { href: '#home', en: '#home', ar: 'الرئيسية' },
+  { href: '#works', en: '#works', ar: 'الأعمال' },
+  { href: '#about-me', en: '#about-me', ar: 'نبذة عني' },
+  { href: '#experience', en: '#experience', ar: 'الخبرة' },
+  { href: '#contacts', en: '#contacts', ar: 'تواصل' },
 ]
 
 export default function Navbar({ profile }) {
@@ -18,6 +19,7 @@ export default function Navbar({ profile }) {
   const location = useLocation()
   const navigate = useNavigate()
   const { theme, toggleTheme } = useTheme()
+  const { lang, toggleLang } = useLanguage()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -43,21 +45,27 @@ export default function Navbar({ profile }) {
       <nav className="max-w-6xl mx-auto flex items-center justify-between px-5 py-4">
         <Link to="/" className="flex items-center gap-2 font-mono font-semibold text-text">
           <span className="text-accent-violet">◆</span>
-          {profile?.name || 'Elias'}
+          {profile?.name || 'Portfolio'}
         </Link>
 
         <ul className="hidden md:flex items-center gap-7 font-mono text-sm text-muted">
           {LINKS.map((l) => (
             <li key={l.href}>
               <button onClick={() => handleNav(l.href)} className="hover:text-accent-violet transition-colors">
-                {l.label}
+                {lang === 'ar' ? l.ar : l.en}
               </button>
             </li>
           ))}
         </ul>
 
         <div className="hidden md:flex items-center gap-4">
-          <span className="font-mono text-sm text-muted">EN</span>
+          <button
+            onClick={toggleLang}
+            aria-label="Toggle language"
+            className="font-mono text-sm text-muted hover:text-accent-violet border border-bg-border rounded px-2 py-0.5 transition-colors"
+          >
+            {lang === 'en' ? 'AR' : 'EN'}
+          </button>
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
@@ -74,9 +82,15 @@ export default function Navbar({ profile }) {
           <a href={profile?.figma_url || '#'} target="_blank" rel="noreferrer" aria-label="Figma" className="text-muted hover:text-text">
             <Figma size={18} />
           </a>
+          <Link to="/admin" aria-label="Admin login" className="text-muted hover:text-accent-violet opacity-40 hover:opacity-100 transition-opacity">
+            <Lock size={16} />
+          </Link>
         </div>
 
         <div className="flex items-center gap-3 md:hidden">
+          <button onClick={toggleLang} aria-label="Toggle language" className="font-mono text-xs text-text border border-bg-border rounded px-1.5 py-0.5">
+            {lang === 'en' ? 'AR' : 'EN'}
+          </button>
           <button onClick={toggleTheme} aria-label="Toggle theme" className="text-text">
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
@@ -96,7 +110,7 @@ export default function Navbar({ profile }) {
             transition={{ duration: 0.25 }}
           >
             <div className="flex justify-between items-center px-5 py-4">
-              <span className="font-mono font-semibold">{profile?.name || 'Elias'}</span>
+              <span className="font-mono font-semibold">{profile?.name || 'Portfolio'}</span>
               <button onClick={() => setOpen(false)} aria-label="Close menu">
                 <X size={22} />
               </button>
@@ -104,9 +118,14 @@ export default function Navbar({ profile }) {
             <ul className="flex flex-col gap-6 px-6 mt-8 font-mono text-2xl">
               {LINKS.map((l) => (
                 <li key={l.href}>
-                  <button onClick={() => handleNav(l.href)}>{l.label}</button>
+                  <button onClick={() => handleNav(l.href)}>{lang === 'ar' ? l.ar : l.en}</button>
                 </li>
               ))}
+              <li>
+                <Link to="/admin" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base text-muted">
+                  <Lock size={16} /> Admin
+                </Link>
+              </li>
             </ul>
             <div className="flex gap-5 px-6 mt-10">
               <a href={profile?.github_url || '#'} target="_blank" rel="noreferrer"><Github /></a>

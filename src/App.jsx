@@ -25,7 +25,7 @@ export default function App() {
     <>
       {showSplash && (
         <SplashScreen
-          name={splashProfile?.name || 'Elias'}
+          name={splashProfile?.name || 'Portfolio'}
           role={[splashProfile?.role_line_1, splashProfile?.role_line_2].filter(Boolean).join(' · ') || 'developer'}
           onDone={() => setShowSplash(false)}
         />

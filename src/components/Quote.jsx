@@ -1,6 +1,10 @@
 import Reveal from './Reveal'
+import { useLanguage } from '../context/LanguageContext'
 
-export default function Quote({ text, author }) {
+export default function Quote({ profile }) {
+  const { pick } = useLanguage()
+  const text = pick(profile, 'quote_text')
+  const author = profile?.quote_author
   if (!text) return null
   return (
     <Reveal className="max-w-6xl mx-auto px-5 pb-16">

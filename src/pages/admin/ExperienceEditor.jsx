@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { Trash2, Plus } from 'lucide-react'
 
-const EMPTY = { role: '', company: '', date_range: '', points_raw: '', sort_order: 0 }
+const EMPTY = { role: '', role_ar: '', company: '', date_range: '', points_raw: '', points_ar_raw: '', sort_order: 0 }
 
 export default function ExperienceEditor() {
   const [items, setItems] = useState([])
@@ -19,8 +19,12 @@ export default function ExperienceEditor() {
 
   const handleSave = async (e) => {
     e.preventDefault()
-    const { id, points_raw, ...rest } = editing
-    const payload = { ...rest, points: (points_raw || '').split('\n').filter(Boolean) }
+    const { id, points_raw, points_ar_raw, ...rest } = editing
+    const payload = {
+      ...rest,
+      points: (points_raw || '').split('\n').filter(Boolean),
+      points_ar: (points_ar_raw || '').split('\n').filter(Boolean),
+    }
     if (id) {
       await supabase.from('experience').update(payload).eq('id', id)
     } else {
@@ -57,7 +61,7 @@ export default function ExperienceEditor() {
             </div>
             <div className="flex gap-3">
               <button
-                onClick={() => setEditing({ ...exp, points_raw: (exp.points || []).join('\n') })}
+                onClick={() => setEditing({ ...exp, points_raw: (exp.points || []).join('\n'), points_ar_raw: (exp.points_ar || []).join('\n') })}
                 className="text-sm font-mono text-accent-violet"
               >
                 Edit
@@ -79,6 +83,13 @@ export default function ExperienceEditor() {
             className="w-full bg-transparent border border-bg-border rounded px-3 py-2 text-sm outline-none focus:border-accent-violet"
           />
           <input
+            placeholder="Role (Arabic, optional)"
+            dir="rtl"
+            value={editing.role_ar || ''}
+            onChange={(e) => setEditing({ ...editing, role_ar: e.target.value })}
+            className="w-full bg-transparent border border-bg-border rounded px-3 py-2 text-sm outline-none focus:border-accent-violet"
+          />
+          <input
             placeholder="Company"
             value={editing.company}
             onChange={(e) => setEditing({ ...editing, company: e.target.value })}
@@ -95,6 +106,14 @@ export default function ExperienceEditor() {
             rows={4}
             value={editing.points_raw}
             onChange={(e) => setEditing({ ...editing, points_raw: e.target.value })}
+            className="w-full bg-transparent border border-bg-border rounded px-3 py-2 text-sm outline-none focus:border-accent-violet"
+          />
+          <textarea
+            placeholder={'Bullet points (Arabic, one per line, optional)'}
+            dir="rtl"
+            rows={4}
+            value={editing.points_ar_raw || ''}
+            onChange={(e) => setEditing({ ...editing, points_ar_raw: e.target.value })}
             className="w-full bg-transparent border border-bg-border rounded px-3 py-2 text-sm outline-none focus:border-accent-violet"
           />
           <input

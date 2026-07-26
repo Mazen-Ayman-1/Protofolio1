@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import FlutterLogo from './FlutterLogo'
 
-export default function SplashScreen({ name = 'Elias', role = 'developer', onDone }) {
+export default function SplashScreen({ name = 'Portfolio', role = 'developer', onDone }) {
   const [phase, setPhase] = useState(0) // 0: fly-in, 1: portal grow, 2: fade out
 
   useEffect(() => {
@@ -19,10 +20,9 @@ export default function SplashScreen({ name = 'Elias', role = 'developer', onDon
           exit={{ opacity: 0 }}
           transition={{ duration: 0.55 }}
         >
-          {/* portal mark that flies in, then grows to swallow the screen */}
+          {/* Flutter mark that flies in, then grows to swallow the screen */}
           <motion.div
-            className="rounded-full bg-gradient-to-br from-accent-violet to-accent-pink"
-            style={{ width: 72, height: 72, filter: 'drop-shadow(0 0 30px rgba(157,123,255,0.9))' }}
+            style={{ width: 72, height: 72, filter: 'drop-shadow(0 0 30px rgba(84,197,248,0.7))' }}
             initial={{ y: -160, opacity: 0, scale: 1 }}
             animate={
               phase === 0
@@ -34,7 +34,9 @@ export default function SplashScreen({ name = 'Elias', role = 'developer', onDon
                 ? { duration: 0.65, delay: 0.1, ease: [0.34, 1.4, 0.64, 1] }
                 : { duration: 0.9, ease: [0.4, 0, 0.6, 1] }
             }
-          />
+          >
+            <FlutterLogo className="w-full h-full" />
+          </motion.div>
 
           <motion.div
             className="text-center"

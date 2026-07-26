@@ -5,12 +5,14 @@ import ProfileEditor from './ProfileEditor'
 import ProjectsEditor from './ProjectsEditor'
 import SkillsEditor from './SkillsEditor'
 import ExperienceEditor from './ExperienceEditor'
+import EducationEditor from './EducationEditor'
 import Messages from './Messages'
 
 const TABS = [
   { key: 'profile', label: 'Profile', Component: ProfileEditor },
   { key: 'projects', label: 'Projects', Component: ProjectsEditor },
   { key: 'skills', label: 'Skills', Component: SkillsEditor },
+  { key: 'education', label: 'Education', Component: EducationEditor },
   { key: 'experience', label: 'Experience', Component: ExperienceEditor },
   { key: 'messages', label: 'Messages', Component: Messages },
 ]

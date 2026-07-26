@@ -3,10 +3,12 @@ import Footer from '../components/Footer'
 import ProjectCard from '../components/ProjectCard'
 import Reveal from '../components/Reveal'
 import TextReveal from '../components/TextReveal'
+import { useLanguage } from '../context/LanguageContext'
 import { usePortfolioData } from '../hooks/usePortfolioData'
 
 export default function Projects() {
   const { profile, projects, loading } = usePortfolioData()
+  const { lang } = useLanguage()
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted font-mono">Loading...</div>
@@ -27,7 +29,7 @@ export default function Projects() {
           <h1 className="font-mono text-accent-violet text-xl">
             <TextReveal text="/projects" />
           </h1>
-          <p className="text-muted text-sm mt-1">List of my projects</p>
+          <p className="text-muted text-sm mt-1">{lang === 'ar' ? 'قائمة مشاريعي' : 'List of my projects'}</p>
         </Reveal>
 
         {Object.keys(groups).map((g) => (
@@ -43,7 +45,11 @@ export default function Projects() {
           </div>
         ))}
 
-        {projects.length === 0 && <p className="text-muted text-sm">No projects yet — add some from the admin panel.</p>}
+        {projects.length === 0 && (
+          <p className="text-muted text-sm">
+            {lang === 'ar' ? 'لسه مفيش مشاريع — ضيف من لوحة التحكم.' : 'No projects yet — add some from the admin panel.'}
+          </p>
+        )}
       </main>
       <Footer profile={profile} />
     </div>

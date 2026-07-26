@@ -97,6 +97,21 @@ export default function ProjectsEditor() {
             onChange={(e) => setEditing({ ...editing, description: e.target.value })}
             className="w-full bg-transparent border border-bg-border rounded px-3 py-2 text-sm outline-none focus:border-accent-violet"
           />
+          <input
+            placeholder="title (Arabic, optional)"
+            dir="rtl"
+            value={editing.title_ar || ''}
+            onChange={(e) => setEditing({ ...editing, title_ar: e.target.value })}
+            className="w-full bg-transparent border border-bg-border rounded px-3 py-2 text-sm outline-none focus:border-accent-violet"
+          />
+          <textarea
+            placeholder="description (Arabic, optional)"
+            dir="rtl"
+            rows={3}
+            value={editing.description_ar || ''}
+            onChange={(e) => setEditing({ ...editing, description_ar: e.target.value })}
+            className="w-full bg-transparent border border-bg-border rounded px-3 py-2 text-sm outline-none focus:border-accent-violet"
+          />
           {['live_url', 'demo_url', 'github_url', 'cached_url', 'figma_url', 'linkedin_url'].map((k) => (
             <input
               key={k}
