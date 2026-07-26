@@ -25,8 +25,8 @@ const FIELDS = [
   ['email', 'Contact email'],
   ['discord_tag', 'Discord tag'],
   ['github_url', 'GitHub URL'],
-  ['dribbble_url', 'Dribbble URL'],
-  ['figma_url', 'Figma URL'],
+  ['linkedin_url', 'LinkedIn URL'],
+  ['whatsapp_url', 'WhatsApp URL (e.g. https://wa.me/201153532383)'],
   ['short_title', 'Footer short title'],
 ]
 

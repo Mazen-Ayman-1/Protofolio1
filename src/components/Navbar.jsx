@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Github, Dribbble, Figma, Sun, Moon, Lock } from 'lucide-react'
+import { Menu, X, Github, Linkedin, MessageCircle, Sun, Moon, Lock } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { useLanguage } from '../context/LanguageContext'
 
@@ -73,15 +73,21 @@ export default function Navbar({ profile }) {
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <a href={profile?.github_url || '#'} target="_blank" rel="noreferrer" aria-label="GitHub" className="text-muted hover:text-text">
-            <Github size={18} />
-          </a>
-          <a href={profile?.dribbble_url || '#'} target="_blank" rel="noreferrer" aria-label="Dribbble" className="text-muted hover:text-text">
-            <Dribbble size={18} />
-          </a>
-          <a href={profile?.figma_url || '#'} target="_blank" rel="noreferrer" aria-label="Figma" className="text-muted hover:text-text">
-            <Figma size={18} />
-          </a>
+          {profile?.github_url && (
+            <a href={profile.github_url} target="_blank" rel="noreferrer" aria-label="GitHub" className="text-muted hover:text-text">
+              <Github size={18} />
+            </a>
+          )}
+          {profile?.linkedin_url && (
+            <a href={profile.linkedin_url} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="text-muted hover:text-text">
+              <Linkedin size={18} />
+            </a>
+          )}
+          {profile?.whatsapp_url && (
+            <a href={profile.whatsapp_url} target="_blank" rel="noreferrer" aria-label="WhatsApp" className="text-muted hover:text-text">
+              <MessageCircle size={18} />
+            </a>
+          )}
           <Link to="/admin" aria-label="Admin login" className="text-muted hover:text-accent-violet opacity-40 hover:opacity-100 transition-opacity">
             <Lock size={16} />
           </Link>
@@ -128,9 +134,9 @@ export default function Navbar({ profile }) {
               </li>
             </ul>
             <div className="flex gap-5 px-6 mt-10">
-              <a href={profile?.github_url || '#'} target="_blank" rel="noreferrer"><Github /></a>
-              <a href={profile?.dribbble_url || '#'} target="_blank" rel="noreferrer"><Dribbble /></a>
-              <a href={profile?.figma_url || '#'} target="_blank" rel="noreferrer"><Figma /></a>
+              {profile?.github_url && <a href={profile.github_url} target="_blank" rel="noreferrer"><Github /></a>}
+              {profile?.linkedin_url && <a href={profile.linkedin_url} target="_blank" rel="noreferrer"><Linkedin /></a>}
+              {profile?.whatsapp_url && <a href={profile.whatsapp_url} target="_blank" rel="noreferrer"><MessageCircle /></a>}
             </div>
           </motion.div>
         )}

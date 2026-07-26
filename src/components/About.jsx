@@ -1,6 +1,7 @@
 import Reveal from './Reveal'
 import TextReveal from './TextReveal'
 import { useLanguage } from '../context/LanguageContext'
+import { computeStats } from '../lib/stats'
 
 const INFO = [
   ['university', 'University', 'الجامعة'],
@@ -9,34 +10,15 @@ const INFO = [
   ['phone', 'Phone', 'التليفون'],
 ]
 
-function yearsSince(dateStr) {
-  if (!dateStr) return null
-  const start = new Date(dateStr)
-  if (isNaN(start.getTime())) return null
-  const now = new Date()
-  let years = now.getFullYear() - start.getFullYear()
-  const hadAnniversary =
-    now.getMonth() > start.getMonth() || (now.getMonth() === start.getMonth() && now.getDate() >= start.getDate())
-  if (!hadAnniversary) years -= 1
-  return Math.max(years, 1)
-}
-
-export default function About({ profile, projects = [], skills = [] }) {
+export default function About({ profile, projects = [], experience = [], certificates = [] }) {
   const { lang, pick } = useLanguage()
   const info = INFO.filter(([key]) => profile?.[key])
 
-  // auto-computed stats: years of experience (from a start date), live project count,
-  // and certificate count (skills tagged with the "Certifications" category)
-  const autoYears = yearsSince(profile?.experience_start_date)
-  const yearsLabel = autoYears ? `${autoYears}+` : profile?.years_experience || null
-  const projectsLabel = projects.length > 0 ? `${projects.length}+` : profile?.projects_count || null
-  const certCount = skills.filter((s) => (s.category || '').toLowerCase() === 'certifications').length
-  const certsLabel = certCount > 0 ? `${certCount}+` : null
-
+  const { years, projectsCount, certs } = computeStats({ profile, projects, experience, certificates })
   const stats = [
-    yearsLabel && { value: yearsLabel, label: 'Years Experience', labelAr: 'سنين الخبرة' },
-    projectsLabel && { value: projectsLabel, label: 'Projects Done', labelAr: 'مشروع' },
-    certsLabel && { value: certsLabel, label: 'Certificates', labelAr: 'شهادة' },
+    years && { value: years, label: 'Years Experience', labelAr: 'سنين الخبرة' },
+    projectsCount && { value: projectsCount, label: 'Projects Done', labelAr: 'مشروع' },
+    certs && { value: certs, label: 'Certificates', labelAr: 'شهادة' },
     profile?.committed_percent && { value: profile.committed_percent, label: 'Committed', labelAr: 'التزام' },
   ].filter(Boolean)
 

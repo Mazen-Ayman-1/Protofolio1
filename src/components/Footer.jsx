@@ -1,4 +1,4 @@
-import { Github, Dribbble, Figma } from 'lucide-react'
+import { Github, Linkedin, MessageCircle } from 'lucide-react'
 
 export default function Footer({ profile }) {
   return (
@@ -9,9 +9,15 @@ export default function Footer({ profile }) {
           <p className="text-muted text-sm">{profile?.short_title || 'Web designer and front-end developer'}</p>
         </div>
         <div className="flex gap-4 text-muted">
-          <a href={profile?.github_url || '#'} target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={18} /></a>
-          <a href={profile?.dribbble_url || '#'} target="_blank" rel="noreferrer" aria-label="Dribbble"><Dribbble size={18} /></a>
-          <a href={profile?.figma_url || '#'} target="_blank" rel="noreferrer" aria-label="Figma"><Figma size={18} /></a>
+          {profile?.github_url && (
+            <a href={profile.github_url} target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={18} /></a>
+          )}
+          {profile?.linkedin_url && (
+            <a href={profile.linkedin_url} target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin size={18} /></a>
+          )}
+          {profile?.whatsapp_url && (
+            <a href={profile.whatsapp_url} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle size={18} /></a>
+          )}
         </div>
       </div>
       <p className="text-center text-xs text-muted pb-6">

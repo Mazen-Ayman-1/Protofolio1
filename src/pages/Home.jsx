@@ -7,13 +7,14 @@ import Skills from '../components/Skills'
 import About from '../components/About'
 import Education from '../components/Education'
 import Experience from '../components/Experience'
+import Certificates from '../components/Certificates'
 import Contact from '../components/Contact'
 import Footer from '../components/Footer'
 import { CursorGlow, ScrollToTop } from '../components/PageFx'
 import { usePortfolioData } from '../hooks/usePortfolioData'
 
 export default function Home() {
-  const { profile, projects, skills, experience, education, loading } = usePortfolioData()
+  const { profile, projects, skills, experience, education, certificates, loading } = usePortfolioData()
 
   useEffect(() => {
     if (!profile) return
@@ -39,13 +40,14 @@ export default function Home() {
     <div className="dot-grid bg-fixed">
       <CursorGlow />
       <Navbar profile={profile} />
-      <Hero profile={profile} />
-      <Quote profile={profile} />
-      <About profile={profile} projects={projects} skills={skills} />
+      <Hero profile={profile} projects={projects} experience={experience} certificates={certificates} />
+      <About profile={profile} projects={projects} experience={experience} certificates={certificates} />
       <Education education={education} />
       <Experience experience={experience} />
       <ProjectsPreview projects={projects} />
       <Skills skills={skills} />
+      <Certificates certificates={certificates} />
+      <Quote profile={profile} />
       <Contact profile={profile} />
       <Footer profile={profile} />
       <ScrollToTop />

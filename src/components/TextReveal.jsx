@@ -24,7 +24,7 @@ export default function TextReveal({
             className={`inline-block ${wordClassName}`}
             initial={{ y: '110%' }}
             whileInView={{ y: '0%' }}
-            viewport={{ once: true, amount: 0.6 }}
+            viewport={{ once: false, amount: 0.6 }}
             transition={{
               duration: 0.6,
               delay: baseDelay + (startIndex + i) * stagger,

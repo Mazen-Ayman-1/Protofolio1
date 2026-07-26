@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Mail, Phone, Linkedin, Github, MessageCircle } from 'lucide-react'
 import Reveal from './Reveal'
 import TextReveal from './TextReveal'
 import { supabase } from '../lib/supabaseClient'
@@ -24,6 +25,18 @@ export default function Contact({ profile }) {
     setForm({ name: '', email: '', title: '', message: '' })
   }
 
+  const infoCards = [
+    profile?.email && { Icon: Mail, label: lang === 'ar' ? 'الإيميل' : 'Email', value: profile.email, href: `mailto:${profile.email}` },
+    profile?.phone && { Icon: Phone, label: lang === 'ar' ? 'التليفون' : 'Phone', value: profile.phone, href: `tel:${profile.phone}` },
+    profile?.linkedin_url && { Icon: Linkedin, label: 'LinkedIn', value: profile.name || 'LinkedIn', href: profile.linkedin_url },
+  ].filter(Boolean)
+
+  const socials = [
+    profile?.github_url && { Icon: Github, href: profile.github_url, label: 'GitHub' },
+    profile?.linkedin_url && { Icon: Linkedin, href: profile.linkedin_url, label: 'LinkedIn' },
+    profile?.whatsapp_url && { Icon: MessageCircle, href: profile.whatsapp_url, label: 'WhatsApp' },
+  ].filter(Boolean)
+
   return (
     <section id="contacts" className="max-w-6xl mx-auto px-5 py-16">
       <Reveal className="mb-6 border-b border-bg-border pb-3">
@@ -33,19 +46,47 @@ export default function Contact({ profile }) {
       </Reveal>
 
       <div className="grid md:grid-cols-2 gap-10">
-        <Reveal className="text-muted">
-          <p>
+        <Reveal className="space-y-3">
+          <p className="text-muted mb-4">
             {lang === 'ar'
               ? 'أنا مهتم بفرص العمل الحر (freelance). لو عندك طلب أو سؤال تاني، متترددش تتواصل معايا.'
               : "I'm interested in freelance opportunities. However, if you have other request or question, don't hesitate to contact me."}
           </p>
-          <div className="mt-6 border border-bg-border bg-bg-card rounded-lg p-4 max-w-xs">
-            <p className="font-mono text-sm text-text mb-1">{lang === 'ar' ? 'ابعتلي رسالة هنا' : 'Message me here'}</p>
-            {profile?.discord_tag && <p className="text-sm">{profile.discord_tag}</p>}
-            {profile?.email && (
-              <p className="text-sm break-all">{profile.email}</p>
-            )}
-          </div>
+
+          {infoCards.map(({ Icon, label, value, href }) => (
+            <a
+              key={label}
+              href={href}
+              target={href.startsWith('http') ? '_blank' : undefined}
+              rel="noreferrer"
+              className="flex items-center gap-3 border border-bg-border bg-bg-card rounded-lg px-4 py-3 hover:border-accent-violet transition-colors"
+            >
+              <span className="w-9 h-9 rounded-full bg-accent-violet/10 flex items-center justify-center text-accent-violet flex-shrink-0">
+                <Icon size={16} />
+              </span>
+              <div>
+                <p className="text-[11px] text-muted uppercase tracking-wide">{label}</p>
+                <p className="text-sm font-medium break-all">{value}</p>
+              </div>
+            </a>
+          ))}
+
+          {socials.length > 0 && (
+            <div className="flex gap-3 pt-2">
+              {socials.map(({ Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={label}
+                  className="w-10 h-10 rounded-full border border-bg-border flex items-center justify-center text-muted hover:border-accent-violet hover:text-accent-violet transition-colors"
+                >
+                  <Icon size={17} />
+                </a>
+              ))}
+            </div>
+          )}
         </Reveal>
 
         <Reveal delay={0.15}>
@@ -81,7 +122,7 @@ export default function Contact({ profile }) {
               name="message"
               value={form.message}
               onChange={handleChange}
-              placeholder={lang === 'ar' ? 'الرسالة' : 'Message'}
+              placeholder={lang === 'ar' ? 'الرسالة' : "I'd love to hear about your project"}
               rows={5}
               className="w-full bg-transparent border border-bg-border rounded px-3 py-2.5 text-sm focus:border-accent-violet outline-none"
             />
@@ -90,7 +131,7 @@ export default function Contact({ profile }) {
               disabled={status === 'sending'}
               className="px-5 py-2.5 border border-accent-violet rounded font-mono text-sm hover:bg-accent-violet hover:text-bg transition-colors disabled:opacity-50"
             >
-              {status === 'sending' ? (lang === 'ar' ? 'بيترسل...' : 'Sending...') : lang === 'ar' ? 'إرسال' : 'Send'}
+              {status === 'sending' ? (lang === 'ar' ? 'بيترسل...' : 'Sending...') : lang === 'ar' ? 'إرسال' : 'Send Message'}
             </button>
             {status === 'sent' && (
               <p className="text-sm text-green-400">{lang === 'ar' ? 'اتبعتت الرسالة — شكرًا!' : 'Message sent — thank you!'}</p>

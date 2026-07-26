@@ -6,6 +6,7 @@ import ProjectsEditor from './ProjectsEditor'
 import SkillsEditor from './SkillsEditor'
 import ExperienceEditor from './ExperienceEditor'
 import EducationEditor from './EducationEditor'
+import CertificatesEditor from './CertificatesEditor'
 import Messages from './Messages'
 
 const TABS = [
@@ -14,6 +15,7 @@ const TABS = [
   { key: 'skills', label: 'Skills', Component: SkillsEditor },
   { key: 'education', label: 'Education', Component: EducationEditor },
   { key: 'experience', label: 'Experience', Component: ExperienceEditor },
+  { key: 'certificates', label: 'Certificates', Component: CertificatesEditor },
   { key: 'messages', label: 'Messages', Component: Messages },
 ]
 

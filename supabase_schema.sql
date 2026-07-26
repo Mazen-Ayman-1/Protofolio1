@@ -1,5 +1,7 @@
 -- Run this whole file in Supabase Dashboard -> SQL Editor -> New query -> Run
--- Safe to re-run even if you ran an earlier version of this file before (uses IF NOT EXISTS everywhere).
+-- Fully safe to re-run any time (tables, columns, and policies are all re-runnable
+-- without errors — each policy is dropped and recreated, seed data only inserts
+-- if the table is empty).
 
 -- Migration: adds new profile columns if this file was run before without them
 alter table if exists profile add column if not exists years_experience text;
@@ -14,6 +16,10 @@ alter table if exists profile add column if not exists tagline_ar text;
 alter table if exists profile add column if not exists bio_ar text;
 alter table if exists profile add column if not exists quote_text_ar text;
 alter table if exists profile add column if not exists experience_start_date date;
+alter table if exists profile add column if not exists linkedin_url text;
+alter table if exists profile add column if not exists whatsapp_url text;
+alter table if exists skills add column if not exists level int;
+alter table if exists skills add column if not exists icon text;
 alter table if exists projects add column if not exists title_ar text;
 alter table if exists projects add column if not exists description_ar text;
 alter table if exists experience add column if not exists role_ar text;
@@ -51,19 +57,27 @@ create table if not exists profile (
   bio_ar text,
   quote_text_ar text,
   experience_start_date date,
+  linkedin_url text,
+  whatsapp_url text,
   updated_at timestamptz default now()
 );
 
 alter table profile enable row level security;
 
+drop policy if exists "Public can read profile" on profile;
+
 create policy "Public can read profile"
   on profile for select
   using (true);
+
+drop policy if exists "Authenticated can insert profile" on profile;
 
 create policy "Authenticated can insert profile"
   on profile for insert
   to authenticated
   with check (true);
+
+drop policy if exists "Authenticated can update profile" on profile;
 
 create policy "Authenticated can update profile"
   on profile for update
@@ -94,9 +108,13 @@ create table if not exists projects (
 
 alter table projects enable row level security;
 
+drop policy if exists "Public can read projects" on projects;
+
 create policy "Public can read projects"
   on projects for select
   using (true);
+
+drop policy if exists "Authenticated can manage projects" on projects;
 
 create policy "Authenticated can manage projects"
   on projects for all
@@ -109,14 +127,20 @@ create table if not exists skills (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   category text not null,
+  level int,
+  icon text,
   created_at timestamptz default now()
 );
 
 alter table skills enable row level security;
 
+drop policy if exists "Public can read skills" on skills;
+
 create policy "Public can read skills"
   on skills for select
   using (true);
+
+drop policy if exists "Authenticated can manage skills" on skills;
 
 create policy "Authenticated can manage skills"
   on skills for all
@@ -139,9 +163,13 @@ create table if not exists experience (
 
 alter table experience enable row level security;
 
+drop policy if exists "Public can read experience" on experience;
+
 create policy "Public can read experience"
   on experience for select
   using (true);
+
+drop policy if exists "Authenticated can manage experience" on experience;
 
 create policy "Authenticated can manage experience"
   on experience for all
@@ -167,12 +195,42 @@ create table if not exists education (
 
 alter table education enable row level security;
 
+drop policy if exists "Public can read education" on education;
+
 create policy "Public can read education"
   on education for select
   using (true);
 
+drop policy if exists "Authenticated can manage education" on education;
+
 create policy "Authenticated can manage education"
   on education for all
+  to authenticated
+  using (true)
+  with check (true);
+
+-- ========== CERTIFICATES ==========
+create table if not exists certificates (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  issuer text,
+  icon text,
+  credential_url text,
+  issue_date text,
+  sort_order int default 0,
+  created_at timestamptz default now()
+);
+
+alter table certificates enable row level security;
+
+drop policy if exists "Public can read certificates" on certificates;
+create policy "Public can read certificates"
+  on certificates for select
+  using (true);
+
+drop policy if exists "Authenticated can manage certificates" on certificates;
+create policy "Authenticated can manage certificates"
+  on certificates for all
   to authenticated
   using (true)
   with check (true);
@@ -189,15 +247,21 @@ create table if not exists contact_messages (
 
 alter table contact_messages enable row level security;
 
+drop policy if exists "Anyone can send a message" on contact_messages;
+
 create policy "Anyone can send a message"
   on contact_messages for insert
   to anon, authenticated
   with check (true);
 
+drop policy if exists "Authenticated can read messages" on contact_messages;
+
 create policy "Authenticated can read messages"
   on contact_messages for select
   to authenticated
   using (true);
+
+drop policy if exists "Authenticated can delete messages" on contact_messages;
 
 create policy "Authenticated can delete messages"
   on contact_messages for delete
@@ -241,11 +305,17 @@ begin
   end if;
 
   if not exists (select 1 from skills) then
-    insert into skills (name, category) values
-      ('TypeScript', 'Languages'), ('Lua', 'Languages'), ('Python', 'Languages'), ('JavaScript', 'Languages'),
-      ('SQLite / PostgreSQL', 'Databases'), ('Mongo', 'Databases'),
-      ('VSCode / Neovim / Linux', 'Tools'), ('Figma / KFCE / Arch', 'Tools'),
-      ('React / Vue', 'Frameworks'), ('Flask / Express.js', 'Frameworks'),
-      ('HTML / CSS / SCSS', 'Other'), ('REST / Ninja', 'Other');
+    insert into skills (name, category, level, icon) values
+      ('TypeScript', 'Languages', 80, '💠'), ('Lua', 'Languages', 70, '🌙'),
+      ('Python', 'Languages', 75, '🐍'), ('JavaScript', 'Languages', 80, '⚡'),
+      ('SQLite / PostgreSQL', 'Databases', 75, '🗄️'), ('Mongo', 'Databases', 70, '🍃'),
+      ('VSCode / Neovim / Linux', 'Tools', 90, '🛠️'), ('Figma / KFCE / Arch', 'Tools', 70, '🎨'),
+      ('React / Vue', 'Frameworks', 80, '⚛️'), ('Flask / Express.js', 'Frameworks', 75, '🧩'),
+      ('HTML / CSS / SCSS', 'Other', 85, '🌐'), ('REST / Ninja', 'Other', 75, '🔌');
+  end if;
+
+  if not exists (select 1 from certificates) then
+    insert into certificates (name, issuer, icon, sort_order) values
+      ('Flutter Development Certificate', 'Route Academy', '🏅', 1);
   end if;
 end $$;
