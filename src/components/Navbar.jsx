@@ -6,11 +6,13 @@ import { useTheme } from '../context/ThemeContext'
 import { useLanguage } from '../context/LanguageContext'
 
 const LINKS = [
-  { href: '#home', en: '#home', ar: 'الرئيسية' },
-  { href: '#works', en: '#works', ar: 'الأعمال' },
-  { href: '#about-me', en: '#about-me', ar: 'نبذة عني' },
-  { href: '#experience', en: '#experience', ar: 'الخبرة' },
-  { href: '#contacts', en: '#contacts', ar: 'تواصل' },
+  { href: '#about-me', en: 'About', ar: 'نبذة عني' },
+  { href: '#education', en: 'Education', ar: 'التعليم' },
+  { href: '#experience', en: 'Experience', ar: 'الخبرة' },
+  { href: '#works', en: 'Projects', ar: 'مشاريعي' },
+  { href: '#skills', en: 'Skills', ar: 'المهارات' },
+  { href: '#certificates', en: 'Certificates', ar: 'الشهادات' },
+  { href: '#contacts', en: 'Contact', ar: 'تواصل' },
 ]
 
 export default function Navbar({ profile }) {

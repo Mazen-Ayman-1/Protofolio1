@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Phone, MessageCircle, Linkedin, Github } from 'lucide-react'
 import Reveal from './Reveal'
 import { RotatedSquares, DotGrid } from './Decor'
 import Typewriter from './Typewriter'
@@ -62,6 +63,53 @@ export default function Hero({ profile, projects = [], experience = [], certific
               </a>
             )}
           </div>
+
+          {(profile?.phone || profile?.whatsapp_url || profile?.linkedin_url || profile?.github_url) && (
+            <div className="flex items-center gap-3 mt-4">
+              {profile?.phone && (
+                <a
+                  href={`tel:${profile.phone}`}
+                  aria-label={lang === 'ar' ? 'اتصال' : 'Call'}
+                  className="w-9 h-9 rounded-full border border-bg-border flex items-center justify-center text-muted hover:border-accent-violet hover:text-accent-violet transition-colors"
+                >
+                  <Phone size={15} />
+                </a>
+              )}
+              {profile?.whatsapp_url && (
+                <a
+                  href={profile.whatsapp_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="WhatsApp"
+                  className="w-9 h-9 rounded-full border border-bg-border flex items-center justify-center text-muted hover:border-accent-violet hover:text-accent-violet transition-colors"
+                >
+                  <MessageCircle size={15} />
+                </a>
+              )}
+              {profile?.linkedin_url && (
+                <a
+                  href={profile.linkedin_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="LinkedIn"
+                  className="w-9 h-9 rounded-full border border-bg-border flex items-center justify-center text-muted hover:border-accent-violet hover:text-accent-violet transition-colors"
+                >
+                  <Linkedin size={15} />
+                </a>
+              )}
+              {profile?.github_url && (
+                <a
+                  href={profile.github_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="GitHub"
+                  className="w-9 h-9 rounded-full border border-bg-border flex items-center justify-center text-muted hover:border-accent-violet hover:text-accent-violet transition-colors"
+                >
+                  <Github size={15} />
+                </a>
+              )}
+            </div>
+          )}
           {statBoxes.length > 0 && (
             <div className="flex flex-wrap gap-3 mt-7">
               {statBoxes.map((s) => (
